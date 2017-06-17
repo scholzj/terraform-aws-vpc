@@ -25,5 +25,5 @@ To create the VPC,
 * Export AWS credentials into environment variables `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY`
 * Apply Terraform configuration:
 ```bash
-terraform apply
+terraform apply --var-file example.tfvars
 ```
