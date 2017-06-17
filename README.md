@@ -27,3 +27,12 @@ To create the VPC,
 ```bash
 terraform apply --var-file example.tfvars
 ```
+
+## Deleting the VPC
+
+To delete the VPC, 
+* Export AWS credentials into environment variables `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY`
+* Destroy Terraform configuration:
+```bash
+terraform destroy --var-file example.tfvars
+```
