@@ -21,14 +21,6 @@ resource "aws_internet_gateway" "gw" {
   vpc_id = "${aws_vpc.vpc.id}"
 
   tags = "${merge(map("Name", var.vpc_name), var.tags)}"
-
-  # tags {
-  #   Name = "${var.vpc_name}"
-  #   Owner = "${var.tags["Owner"]}"
-  #   Application = "${var.tags["Application"]}"
-  #   Confidentiality = "${var.tags["Confidentiality"]}"
-  #   Costcenter = "${var.tags["CostCenter"]}"
-  # }
 }
 
 ############
@@ -44,14 +36,6 @@ resource "aws_subnet" "public_subnet" {
   map_public_ip_on_launch = true
 
   tags = "${merge(map("Name", format("%v-public-%v", var.vpc_name, var.aws_zones[count.index])), var.tags)}"
-
-  # tags {
-  #   Name = "${var.vpc_name}-public-${var.aws_zones[count.index]}"
-  #   Owner = "${var.tags["Owner"]}"
-  #   Application = "${var.tags["Application"]}"
-  #   Confidentiality = "${var.tags["Confidentiality"]}"
-  #   Costcenter = "${var.tags["CostCenter"]}"
-  # }
 }
 
 ############
@@ -68,14 +52,6 @@ resource "aws_route_table" "route" {
     }
 
     tags = "${merge(map("Name", format("%v-route-table", var.vpc_name)), var.tags)}"
-
-    # tags {
-    #   Name = "${var.vpc_name}-route-table"
-    #   Owner = "${var.tags["Owner"]}"
-    #   Application = "${var.tags["Application"]}"
-    #   Confidentiality = "${var.tags["Confidentiality"]}"
-    #   Costcenter = "${var.tags["CostCenter"]}"
-    # }
 }
 
 resource "aws_route_table_association" "route" {
