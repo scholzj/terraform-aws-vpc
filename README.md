@@ -54,4 +54,4 @@ terraform destroy --var-file example.tfvars
 
 ## Including as a module
 
-This repository can be also included as a module into your own configuration. And example of how to include this can be found in the [examples](examples/) dir
+This repository can be also included as a module into your own configuration. And example of how to include this can be found in the [examples](examples/) dir.
