@@ -1,4 +1,7 @@
-output "subnet_id" {
-    count = "${length(var.aws_zones)}"
-    value = "${element(aws_subnet.public_subnet.*.id, count.index)}"
+output "subnet_ids" {
+    value = "${aws_subnet.public_subnet.*.id}"
+}
+
+output "vpc_id" {
+    value = "${aws_vpc.vpc.id}"
 }

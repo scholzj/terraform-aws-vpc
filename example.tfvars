@@ -6,5 +6,4 @@ vpc_cidr = "10.0.0.0/16"
 ## Tags
 tags = {
   Hello = "World"
-  Ahoj = "Svete"
 }
