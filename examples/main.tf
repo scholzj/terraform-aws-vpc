@@ -5,6 +5,7 @@ module "vpc" {
   aws_zones = ["eu-central-1a", "eu-central-1b", "eu-central-1c"]
   vpc_name = "example-vpc"
   vpc_cidr = "10.0.0.0/16"
+  private_subnets = "true"
 
   ## Tags
   tags = {
@@ -18,4 +19,8 @@ output "vpc" {
 
 output "subnets" {
   value = "${module.vpc.subnet_ids}"
+}
+
+output "private_subnets" {
+  value = "${module.vpc.private_subnet_ids}"
 }

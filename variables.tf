@@ -17,6 +17,14 @@ variable aws_zones {
   description = "AWS AZs (Availability zones) where subnets should be created"
 }
 
+# Private subnets
+
+variable private_subnets {
+  description = "Create both private and public subnets"
+  type = "string"
+  default = "false"
+}
+
 # Resource naming
 
 variable vpc_name {
