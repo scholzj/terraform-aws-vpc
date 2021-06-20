@@ -15,13 +15,13 @@ resource "aws_vpc" "vpc" {
   cidr_block = "${var.vpc_cidr}"
   enable_dns_hostnames = true
 
-  tags = "${merge(map("Name", var.vpc_name), var.tags)}"
+  tags = "${merge(tomap({Name = var.vpc_name}), var.tags)}"
 }
 
 resource "aws_internet_gateway" "gw" {
   vpc_id = "${aws_vpc.vpc.id}"
 
-  tags = "${merge(map("Name", var.vpc_name), var.tags)}"
+  tags = "${merge(tomap({Name = var.vpc_name}), var.tags)}"
 }
 
 ############
@@ -36,26 +36,26 @@ resource "aws_subnet" "public_subnet" {
   availability_zone = "${var.aws_zones[count.index]}"
   map_public_ip_on_launch = true
 
-  tags = "${merge(map("Name", format("%v-public-%v", var.vpc_name, var.aws_zones[count.index])), var.tags)}"
+  tags = "${merge(tomap({Name =  format("%v-public-%v", var.vpc_name, var.aws_zones[count.index])}), var.tags)}"
 }
 
 ############
 ## Private Subnets
 ############
 
-resource "aws_eip" "nat" {
+resource aws_eip nat {
   count = "${var.private_subnets == "true" ? length(var.aws_zones) : 0}"
   vpc      = true
 }
 
-resource "aws_nat_gateway" "nat" {
+resource aws_nat_gateway nat {
   count = "${var.private_subnets == "true" ? length(var.aws_zones) : 0}"
   allocation_id = "${element(aws_eip.nat.*.id, count.index)}"
   subnet_id = "${element(aws_subnet.public_subnet.*.id, count.index)}"
 
-  tags = "${merge(map("Name", format("%v-nat-%v", var.vpc_name, var.aws_zones[count.index])), var.tags)}"
+  tags = "${merge(tomap({Name = format("%v-nat-%v", var.vpc_name, var.aws_zones[count.index])}), var.tags)}"
 
-  depends_on = ["aws_eip.nat", "aws_internet_gateway.gw", "aws_subnet.public_subnet"]
+  depends_on = [aws_eip.nat, aws_internet_gateway.gw, aws_subnet.public_subnet]
 }
 
 # Subnet (private)
@@ -66,7 +66,7 @@ resource "aws_subnet" "private_subnet" {
   availability_zone = "${var.aws_zones[count.index]}"
   map_public_ip_on_launch = false
 
-  tags = "${merge(map("Name", format("%v-private-%v", var.vpc_name, var.aws_zones[count.index])), var.tags)}"
+  tags = "${merge(tomap({Name = format("%v-private-%v", var.vpc_name, var.aws_zones[count.index])}), var.tags)}"
 }
 
 ############
@@ -82,7 +82,7 @@ resource "aws_route_table" "route" {
     gateway_id = "${aws_internet_gateway.gw.id}"
   }
 
-  tags = "${merge(map("Name", format("%v-public-route-table", var.vpc_name)), var.tags)}"
+  tags = "${merge(tomap({Name = format("%v-public-route-table", var.vpc_name)}), var.tags)}"
 }
 
 resource "aws_route_table_association" "route" {
@@ -105,7 +105,7 @@ resource "aws_route_table" "private_route" {
     gateway_id = "${element(aws_nat_gateway.nat.*.id, count.index)}"
   }
 
-  tags = "${merge(map("Name", format("%v-private-route-table-%v", var.vpc_name, var.aws_zones[count.index])), var.tags)}"
+  tags = "${merge(tomap({Name = format("%v-private-route-table-%v", var.vpc_name, var.aws_zones[count.index])}), var.tags)}"
 }
 
 resource "aws_route_table_association" "private_route" {
